@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Input, Tabs } from 'antd'
 
@@ -25,7 +26,6 @@ export const PatientListContainer = styled.div`
   background-color: #ffffff;
   font-size: 12px;
   font-family: PingFangSC;
-  color: #ffffff;
   overflow: scroll;
 `
 export const TabsWithStyle = styled(Tabs)`
@@ -79,7 +79,7 @@ export const PatientListHomePage = styled.div`
   justify-content: center;
 `
 
-const Header = styled.div`
+export const Header = styled.div`
   padding: 20px 10px;
   display: flex;
   background-color: #627784;

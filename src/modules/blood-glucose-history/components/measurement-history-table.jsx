@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import { Table, FormControl } from '@sketchpixy/rubix'
 import moment from 'moment'
 import DatePicker from 'react-bootstrap-date-picker'
@@ -46,7 +47,7 @@ export default class MeasurementHistoryTable extends React.Component {
       }
 
       function renderDateItem(item, index) {
-        return <MeasurementHistoryDateRow treatmentDate={(item.value)} key={index} />
+        return <MeasurementHistoryDateRow treatmentDate={item.value} key={index} />
       }
 
       const arrayOfTableRows = []
@@ -66,9 +67,12 @@ export default class MeasurementHistoryTable extends React.Component {
         }
         return (
           <MeasurementHistoryRow
-            treatment={item} key={item._id} deleteBloodGlucoses={this.props.deleteBloodGlucoses}
+            treatment={item}
+            key={item._id}
+            deleteBloodGlucoses={this.props.deleteBloodGlucoses}
             getMeasurementHistory={this.props.getMeasurementHistory}
-          />)
+          />
+        )
       })
     }
 
@@ -88,7 +92,20 @@ export default class MeasurementHistoryTable extends React.Component {
   render() {
     const styles = this.getStyles()
     const { formData, editBloodGlucoses } = this.props
-    const columnTitlesList = ['血糖值', '状态', '服药', '胰岛素', '运动', '食物', '图片', '留言', '备注', '时间', '来源', '操作']
+    const columnTitlesList = [
+      '血糖值',
+      '状态',
+      '服药',
+      '胰岛素',
+      '运动',
+      '食物',
+      '图片',
+      '留言',
+      '备注',
+      '时间',
+      '来源',
+      '操作',
+    ]
 
     //  iGlucose传过来的字段与我们所需显示的不同
     const optionsLabel = ['早餐前', '早餐后', '午餐前', '午餐后', '晚餐前', '晚餐后', '睡前', '凌晨']
@@ -98,13 +115,28 @@ export default class MeasurementHistoryTable extends React.Component {
       <Table responsive bordered style={{ border: 'solid 1px #7d96a6', marginTop: '12px' }}>
         <thead style={{ backgroundColor: '#7d96a6' }}>
           <tr>
-            {
-              columnTitlesList.map((item, index) => <th className="text-center fg-white" style={{ borderRight: '1px solid rgba(0, 0, 0, 0.05)', borderBottom: '1px solid rgba(0, 0, 0, 0.05)' }} key={index}>{item}</th>)
-            }
+            {columnTitlesList.map((item, index) => (
+              <th
+                className="text-center fg-white"
+                style={{
+                  borderRight: '1px solid rgba(0, 0, 0, 0.05)',
+                  borderBottom: '1px solid rgba(0, 0, 0, 0.05)',
+                }}
+                key={index}
+              >
+                {item}
+              </th>
+            ))}
           </tr>
         </thead>
         <tbody>
-          <tr style={this.props.isEditing ? { backgroundColor: 'rgba(248, 230, 27, 0.2)' } : { display: 'none' }}>
+          <tr
+            style={
+              this.props.isEditing
+                ? { backgroundColor: 'rgba(248, 230, 27, 0.2)' }
+                : { display: 'none' }
+            }
+          >
             <td className="text-center" colSpan="12">
               <div style={{ float: 'left' }}>
                 <DatePicker
@@ -137,10 +169,18 @@ export default class MeasurementHistoryTable extends React.Component {
               </div>
             </td>
           </tr>
-          <tr style={this.props.isEditing ? { backgroundColor: 'rgba(248, 230, 27, 0.2)' } : { display: 'none' }}>
+          <tr
+            style={
+              this.props.isEditing
+                ? { backgroundColor: 'rgba(248, 230, 27, 0.2)' }
+                : { display: 'none' }
+            }
+          >
             <td className="text-center">
               <input
-                style={styles.inputShort} name="bgValue" value={formData.bgValue || ''}
+                style={styles.inputShort}
+                name="bgValue"
+                value={formData.bgValue || ''}
                 onChange={e => this.handleChange(e)}
               />
             </td>
@@ -149,11 +189,11 @@ export default class MeasurementHistoryTable extends React.Component {
                 componentClass="select"
                 onChange={e => this.props.editBloodGlucoses('dinnerSituation', e.target.value)}
               >
-                {
-                  optionsLabel.map((item, index) => (
-                    <option key={index} value={optionsLabelForSave[index]}>{item}</option>
-                  ))
-                }
+                {optionsLabel.map((item, index) => (
+                  <option key={index} value={optionsLabelForSave[index]}>
+                    {item}
+                  </option>
+                ))}
               </FormControl>
             </td>
             <td />
@@ -163,7 +203,12 @@ export default class MeasurementHistoryTable extends React.Component {
             <td />
             <td />
             <td className="text-center">
-              <input style={styles.inputLong} name="remarks" onChange={e => this.handleChange(e)} value={formData.remarks || ''} />
+              <input
+                style={styles.inputLong}
+                name="remarks"
+                onChange={e => this.handleChange(e)}
+                value={formData.remarks || ''}
+              />
             </td>
             <td />
             <td />

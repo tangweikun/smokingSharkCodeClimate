@@ -1,8 +1,10 @@
 import styled from 'styled-components'
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 
 import ChatMessage from '../containers/ChatMessage'
 import ChatView from '../containers/ChatView'
+import PatientDetails from '../../patient/containers/PatientDetails'
 
 const ChatIndex = (props) => {
   const patientId = props.match.params.patientId
@@ -10,6 +12,7 @@ const ChatIndex = (props) => {
     <Wrapper>
       <ChatMessage {...props} />
       {patientId ? <ChatView patientId={patientId} /> : null}
+      {patientId ? <PatientDetails patientId={patientId} /> : null}
     </Wrapper>
   )
 }

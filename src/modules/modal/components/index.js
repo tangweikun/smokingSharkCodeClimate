@@ -1,35 +1,35 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import { Modal, Button } from 'antd'
-import get from 'lodash/get'
 import styled from 'styled-components'
 
-const Layout = ({ modal, closeModal }) => {
+const modalButtons = (modal, closeModal) => {
+  const { cancel, save, btns } = modal
   const actionBtns = []
-  if (get(modal, 'cancel')) {
+  if (cancel) {
     actionBtns.push(
-      <Button
-        onClick={modal.cancel.fn || closeModal}
-      >{modal.cancel.label}</Button>,
+      <Button icon={cancel.icon || 'close'} onClick={cancel.fn || closeModal}>
+        {cancel.label}
+      </Button>,
     )
   }
-  if (get(modal, 'save')) {
+  if (save) {
     actionBtns.push(
-      <Button
-        onClick={modal.save.fn}
-        type="primary"
-        icon="save"
-      >{modal.save.label}</Button>,
+      <Button onClick={save.fn} type="primary" icon="save">
+        {save.label}
+      </Button>,
     )
   }
-  if (get(modal, 'btns')) {
-    modal.btns.forEach((element) => {
-      actionBtns.push(
-        <Button
-          onClick={element.fn}
-        >{element.label}</Button>,
-      )
+  if (btns) {
+    btns.forEach((element) => {
+      actionBtns.push(<Button onClick={element.fn}>{element.label}</Button>)
     })
   }
+  return actionBtns
+}
+const Layout = ({ modal, closeModal }) => {
+  const actionBtns = modalButtons(modal, closeModal)
+
   return (
     <ModalWithStyle
       visible={modal.isShowModal}
@@ -50,9 +50,7 @@ Layout.propTypes = {
   closeModal: PropTypes.func.isRequired,
 }
 
-const FooterContainer = styled.div`
-  padding: 10px 30px;
-`
+const FooterContainer = styled.div`padding: 10px 30px;`
 const ModalWithStyle = styled(Modal)`
   max-width: calc(100vw - 100px);
   .ant-modal-header {

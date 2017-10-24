@@ -1,8 +1,8 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import moment from 'moment'
 import { LableWithStyle } from './styled-component'
-
 
 const genderMap = {
   male: '男',
@@ -10,33 +10,38 @@ const genderMap = {
 }
 
 const showPropertys = [
-  { key: 'gender', getValue: o => genderMap[o] },
-  { key: 'dateOfBirth', getValue: o => `${moment().diff(moment(o), 'years')}岁` },
-  { key: 'diabetesType', getValue: o => o },
-  { key: 'startOfIllness', getValue: o => `${moment().diff(moment(o), 'years')}年` },
+  { key: 'gender', getValue: o => genderMap[o] || '?' },
+  {
+    key: 'dateOfBirth',
+    getValue: o => (o ? `${moment().diff(moment(o), 'years')}年` : '?'),
+  },
+  { key: 'diabetesType', getValue: o => o || '?' },
+  {
+    key: 'startOfIllness',
+    getValue: o => (o ? `${moment().diff(moment(o), 'years')}年` : '?'),
+  },
 ]
 
 const ListItem = ({ patient, switchPatient }) => {
   if (!patient) return null
-  return (<ItemContainer onClick={switchPatient}>
-    <div style={{ display: 'table-row' }}>
-      <Avatar src={patient.avatar} />
-      <div style={{ display: 'table-cell', verticalAlign: 'bottom', paddingLeft: '10px' }}>
-        <InlineDiv>
-          <FullName>{patient.nickname}</FullName>
-          {
-            showPropertys
-              .map(property => (<InlineDiv key={property.key}>
-                { property.key !== 'gender' && <LineSpace>|</LineSpace>}
-                <LableWithStyle>{
-                  property.getValue(patient[property.key])
-                }</LableWithStyle>
-              </InlineDiv>))
-          }
-        </InlineDiv>
+  return (
+    <ItemContainer onClick={switchPatient}>
+      <div style={{ display: 'table-row' }}>
+        <Avatar src={patient.avatar} />
+        <div style={{ display: 'table-cell', verticalAlign: 'bottom', paddingLeft: '10px' }}>
+          <InlineDiv>
+            <FullName>{patient.nickname}</FullName>
+            {showPropertys.map(property => (
+              <InlineDiv key={property.key}>
+                {property.key !== 'gender' && <LineSpace>|</LineSpace>}
+                <LableWithStyle>{property.getValue(patient[property.key])}</LableWithStyle>
+              </InlineDiv>
+            ))}
+          </InlineDiv>
+        </div>
       </div>
-    </div>
-  </ItemContainer>)
+    </ItemContainer>
+  )
 }
 
 ListItem.propTypes = {

@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import { Popover } from 'antd'
 import { StyIncomingMessageButton, StyBadge } from './styled-components'
 import ChatMessage from '../containers/ChatMessage'

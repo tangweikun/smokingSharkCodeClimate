@@ -1,22 +1,26 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import ListItem from './ListItem'
 
-const SearchPatientList = ({
-  patientList, handlePatientClick,
-}) => (<div>
-  <SearchInfo>查询结果: </SearchInfo>
-  <SearchContainer>
-    {
-      patientList.length ? patientList.map(patient =>
-        (<ListItem
-          key={patient._id}
-          patient={patient}
-          switchPatient={() => handlePatientClick(patient)}
-        />)) : <EmptyInfo>未查询到用户</EmptyInfo>
-    }
-  </SearchContainer>
-</div>)
+const SearchPatientList = ({ patientList, handlePatientClick }) => (
+  <div>
+    <SearchInfo>查询结果: </SearchInfo>
+    <SearchContainer>
+      {patientList.length ? (
+        patientList.map(patient => (
+          <ListItem
+            key={patient._id}
+            patient={patient}
+            switchPatient={() => handlePatientClick(patient)}
+          />
+        ))
+      ) : (
+        <EmptyInfo>未查询到用户</EmptyInfo>
+      )}
+    </SearchContainer>
+  </div>
+)
 
 SearchPatientList.propTypes = {
   patientList: PropTypes.array.isRequired,

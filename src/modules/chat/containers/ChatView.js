@@ -1,10 +1,12 @@
-import { connect } from 'react-redux'
-import React, { Component, PropTypes } from 'react'
-import { graphql } from 'react-apollo'
+// import { connect } from 'react-redux'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { graphql, compose } from 'react-apollo'
 // import isEqual from 'lodash/isEqual'
+// import update from 'immutability-helper'
 import get from 'lodash/get'
 import ChatViewComponent from '../components/ChatView'
-import { queryMessages, updateChatRoom, closeChatWindow, fetchMoreMessages } from '../actions'
+import { queryMessages, subscriptionMessage } from '../actions'
 // import { withLoading } from '../../../common/withLoading'
 
 // const mapStateToProps = (state, props) => ({
@@ -18,11 +20,11 @@ class ChatView extends Component {
   static propTypes = {
     // updateChatRoom: PropTypes.func.isRequired,
     // fetchMoreMessages: PropTypes.func.isRequired,
-    data: PropTypes.object.isRequired,
+    // data: PropTypes.object.isRequired,
     patientId: PropTypes.string.isRequired,
     // userId: PropTypes.string.isRequired,
-    // subscribeToNewFeedback: PropTypes.func.isRequired,
-    // messages: PropTypes.array.isRequired,
+    subscribeToNewFeedback: PropTypes.func.isRequired,
+    MessageList: PropTypes.object.isRequired,
   }
 
   static scrollToBottom = (patientId) => {
@@ -32,9 +34,9 @@ class ChatView extends Component {
 
   state = { messages: [] }
 
-  // componentWillMount() {
-  //   this.props.subscribeToNewFeedback()
-  // }
+  componentWillMount() {
+    this.props.subscribeToNewFeedback()
+  }
 
   componentDidMount() {
     if (this.props.patientId) {
@@ -45,8 +47,8 @@ class ChatView extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (!nextProps.data.loading) {
-      let messages = get(nextProps.data, 'fetchOrCreateNeedleChatRoom.messages', [])
+    if (!nextProps.MessageList.loading) {
+      let messages = get(nextProps.MessageList, 'fetchOrCreateNeedleChatRoom.messages', [])
       messages = messages.map(message => ({
         ...message,
         sender: message.sender._id === '66728d10dc75bc6a43052036' ? 'self' : 'others',
@@ -122,7 +124,8 @@ class ChatView extends Component {
   // }
 
   render() {
-    const chatRoomId = get(this.props.data, 'fetchOrCreateNeedleChatRoom._id')
+    const chatRoomId = get(this.props.MessageList
+, 'fetchOrCreateNeedleChatRoom._id')
     return (
       <ChatViewComponent
         chatRoomId={chatRoomId}
@@ -134,16 +137,52 @@ class ChatView extends Component {
   }
 }
 
-// export default connect(mapStateToProps, { closeChatWindow })(withLoading(ChatView))
-
-export default connect(null, { updateChatRoom, closeChatWindow, fetchMoreMessages })(
-  graphql(queryMessages, {
-    options: props => ({
-      variables: {
-        patientId: props.patientId,
-        before: new Date(),
+const withData = graphql(queryMessages, {
+  name: 'MessageList',
+  options: props => ({
+    variables: {
+      patientId: props.patientId,
+      before: new Date(),
+    },
+  }),
+  props: props => ({
+    ...props,
+    subscribeToNewFeedback: () => props.MessageList.subscribeToMore({
+      document: subscriptionMessage,
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData.data.chatMessageAdded) {
+          return prev
+        }
+        const newFeedbackItem = subscriptionData.data.chatMessageAdded
+        console.log('New Feedback Item', newFeedbackItem)
+        const newMessage = {
+          ...newFeedbackItem,
+        }
+        switch (newFeedbackItem.__typename) {
+          case 'NeedleTextMessage':
+            newMessage.text = newFeedbackItem.text
+            break
+          case 'NeedleImageMessage':
+            newMessage.imageUrl = newFeedbackItem.imageUrl
+            break
+          case 'NeedleAudioMessage':
+            newMessage.audioUrl = newFeedbackItem.audioUrl
+            break
+          default:
+            newMessage.text = newFeedbackItem.text
+        }
+        return {
+          ...prev,
+          fetchOrCreateNeedleChatRoom: {
+            ...prev.fetchOrCreateNeedleChatRoom,
+            messages: [...prev.fetchOrCreateNeedleChatRoom.messages, newMessage],
+          },
+        }
       },
-      pollInterval: 5000,
     }),
-  })(ChatView),
-)
+  }),
+})
+
+export default compose(
+  withData,
+)(ChatView)

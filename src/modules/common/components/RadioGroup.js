@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import { Radio, Form } from 'antd'
 
 const FormItem = Form.Item
@@ -6,30 +7,27 @@ const FormItem = Form.Item
 const RadioGroup = Radio.Group
 
 export const IRaidoGroup = ({
-  getFieldDecorator, info,
-  handleChange, initialValue,
+  getFieldDecorator,
+  info,
+  handleChange,
+  initialValue,
   isDisabled,
-}) => (<FormItem
-  label={info.label}
-  {...info.formItemLayout}
->
-  {
-    getFieldDecorator(info.property, {
+}) => (
+  <FormItem label={info.label} {...info.formItemLayout}>
+    {getFieldDecorator(info.property, {
       rules: info.rules,
       initialValue: initialValue || '',
-    })(<RadioGroup
-      onChange={handleChange}
-      disabled={isDisabled}
-    >
-      {
-        info.radios.map(radio => (<Radio
-          key={radio.value}
-          value={radio.value}
-        >{radio.label}</Radio>))
-      }
-    </RadioGroup>)
-  }
-</FormItem>)
+    })(
+      <RadioGroup onChange={handleChange} disabled={isDisabled}>
+        {info.radios.map(radio => (
+          <Radio key={radio.value} value={radio.value}>
+            {radio.label}
+          </Radio>
+        ))}
+      </RadioGroup>,
+    )}
+  </FormItem>
+)
 
 IRaidoGroup.propTypes = {
   getFieldDecorator: PropTypes.func.isRequired,

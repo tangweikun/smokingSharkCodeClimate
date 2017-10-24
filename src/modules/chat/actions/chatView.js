@@ -8,10 +8,14 @@ import moment from 'moment'
 export const queryMessages = gql`
   query Messages($patientId: ID!) {
     fetchOrCreateNeedleChatRoom(userId: $patientId) {
+      _id
+      __typename
       ... on NeedleChatRoom {
         _id
+        __typename
         messages {
           _id
+          __typename
           ... on NeedleTextMessage {
             sender {
               _id
@@ -32,7 +36,7 @@ export const queryLatestMessages = gql`
       avatar
       needleChatRoom {
         _id
-        lastSeenAt(userId: "66728d10dc75bc6a43052036")
+        lastSeenAt(userId: $userId)
         latestMessage {
           ... on NeedleTextMessage {
             text
@@ -59,6 +63,11 @@ export const subscriptionMessage = gql`
   subscription chatMessageAdded {
     chatMessageAdded {
       _id
+      sender {
+        _id
+        __typename
+      }
+      __typename
       ... on NeedleTextMessage {
         text
       }
@@ -67,9 +76,6 @@ export const subscriptionMessage = gql`
       }
       ... on NeedleAudioMessage {
         audioUrl
-      }
-      sender {
-        _id
       }
       createdAt
       needleChatRoom {

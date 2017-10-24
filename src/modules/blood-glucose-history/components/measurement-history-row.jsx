@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import moment from 'moment'
 import { Icon, Button } from '@sketchpixy/rubix'
 
@@ -33,14 +34,26 @@ export default class MeasurementHistoryRow extends React.Component {
     const t = this.props.treatment || {}
     const pillNote = t.pillNote || []
     return pillNote.map((a, n) => (
-      <div key={n}>{a.type} {a.value}</div>
+      <div key={n}>
+        {a.type} {a.value}
+      </div>
     ))
   }
   render() {
     const styles = this.getStyles()
     const {
-      bgValue, dinnerSituation, pillNote, insulinInjection, sportNote,
-      mealNote, remarks, source, voiceNote, createdAt, _id, author,
+      bgValue,
+      dinnerSituation,
+      pillNote,
+      insulinInjection,
+      sportNote,
+      mealNote,
+      remarks,
+      source,
+      voiceNote,
+      createdAt,
+      _id,
+      author,
     } = this.props.treatment
 
     const isManual = source === 'manual'
@@ -61,42 +74,50 @@ export default class MeasurementHistoryRow extends React.Component {
         <td className="fg-warning text-center" style={bgValueStyle}>
           {transformBgValue}
         </td>
-        <td className="text-center" style={styles.verticalMiddle}>{dinnerSituation}</td>
         <td className="text-center" style={styles.verticalMiddle}>
-          {pillNote ?
-            <div>
-              {this.renderPills()}
-            </div> : ''
-          }
+          {dinnerSituation}
         </td>
-        <td className="text-center" style={styles.verticalMiddle}>{insulinInjection}</td>
-        <td className="text-center" style={styles.verticalMiddle}>{sportNote}</td>
-        <td className="text-center" style={styles.verticalMiddle}>{mealNote}</td>
+        <td className="text-center" style={styles.verticalMiddle}>
+          {pillNote ? <div>{this.renderPills()}</div> : ''}
+        </td>
+        <td className="text-center" style={styles.verticalMiddle}>
+          {insulinInjection}
+        </td>
+        <td className="text-center" style={styles.verticalMiddle}>
+          {sportNote}
+        </td>
+        <td className="text-center" style={styles.verticalMiddle}>
+          {mealNote}
+        </td>
         <td className="text-center" style={styles.verticalMiddle} />
         <td className="text-center" style={styles.verticalMiddle}>
-          {
-            voiceNote ?
-              <audio controls style={{ width: '120px', verticalAlign: 'middle' }}>
-                <source src={voiceNote} />
-              </audio> : null
-          }
-
+          {voiceNote ? (
+            <audio controls style={{ width: '120px', verticalAlign: 'middle' }}>
+              <source src={voiceNote} />
+            </audio>
+          ) : null}
         </td>
-        <td className="text-center" style={{ verticalAlign: 'middle', wordBreak: 'break-all', maxWidth: '124px' }}>
+        <td
+          className="text-center"
+          style={{ verticalAlign: 'middle', wordBreak: 'break-all', maxWidth: '124px' }}
+        >
           {remarks}
         </td>
         <td className="text-center" style={styles.verticalMiddle}>
-          { isManual ? '' : moment(createdAt).format('HH:mm')}
+          {isManual ? '' : moment(createdAt).format('HH:mm')}
         </td>
-        <td className="text-center" style={styles.verticalMiddle}>{isManual ? '手动' : '自动'}</td>
+        <td className="text-center" style={styles.verticalMiddle}>
+          {isManual ? '手动' : '自动'}
+        </td>
         <td
           className="text-center"
           style={{ verticalAlign: 'middle', cursor: 'pointer', position: 'relative' }}
         >
-          {this.state.modelOpen ?
+          {this.state.modelOpen ? (
             <div style={styles.model} onMouseLeave={() => this.setState({ modelOpen: false })}>
               <Button
-                bsStyle="danger" style={{ marginRight: '5px' }}
+                bsStyle="danger"
+                style={{ marginRight: '5px' }}
                 onClick={() => {
                   this.setState({ modelOpen: false })
                   this.props.deleteBloodGlucoses(_id)
@@ -108,9 +129,15 @@ export default class MeasurementHistoryRow extends React.Component {
               <Button bsStyle="default" onClick={() => this.setState({ modelOpen: false })}>
                 取消
               </Button>
-            </div> : ''
-          }
-          {isManual ? <Icon glyph="glyphicon-trash" onClick={() => this.setState({ modelOpen: true })} /> : ''}
+            </div>
+          ) : (
+            ''
+          )}
+          {isManual ? (
+            <Icon glyph="glyphicon-trash" onClick={() => this.setState({ modelOpen: true })} />
+          ) : (
+            ''
+          )}
         </td>
       </tr>
     )

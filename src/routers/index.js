@@ -6,8 +6,9 @@ import LoginLayout from '../layout/LoginLayout'
 import Login from '../modules/login/components/Login'
 import MainLayout from '../layout/main-layout/containers'
 
+import Home from '../modules/home/components'
 import PatientIndex from '../modules/patient/components/PatientIndex'
-import ChatIndex from '../modules/chat/components/ChatIndex'
+import ChatIndex from '../modules/chat/containers/ChatIndex'
 
 // const Patient = asyncComponent(() => import('./patient').then(module => module.default))
 
@@ -15,7 +16,7 @@ const routes = [
   {
     path: '/',
     exact: true,
-    component: () => <div>home</div>,
+    component: Home,
   },
   {
     path: '/chat',

@@ -1,4 +1,4 @@
-// import React, { PropTypes } from 'react'
+// import React from 'react'
 // import isEqual from 'lodash/isEqual'
 // import get from 'lodash/get'
 import { graphql, compose } from 'react-apollo'

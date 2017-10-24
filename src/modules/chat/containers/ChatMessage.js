@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { graphql, compose } from 'react-apollo'
 import get from 'lodash/get'
@@ -39,7 +40,7 @@ export default compose(
       variables: {
         userId: '66728d10dc75bc6a43052036',
       },
-      pollInterval: 10000,
+      // pollInterval: 10000,
     }),
   }),
   graphql(updateLastSeenAt, { name: 'mutationUpdateLastSeenAt' }),

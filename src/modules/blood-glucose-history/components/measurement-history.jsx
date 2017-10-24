@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
+
 import {
   Row,
   Col,
@@ -36,11 +37,10 @@ export default class MeasurementHistory extends React.Component {
                   <div style={{ float: 'left' }}>
                     <h4>血糖测量历史记录</h4>
                   </div>
-                  <div
-                    style={this.props.isEditing ? { display: 'none' } : styles.plus}
-                  >
+                  <div style={this.props.isEditing ? { display: 'none' } : styles.plus}>
                     <Button
-                      bsStyle="primary" inverse
+                      bsStyle="primary"
+                      inverse
                       onClick={() => this.props.startInsertBloodGlucoses()}
                     >
                       <Icon glyph="glyphicon-plus">添加记录</Icon>

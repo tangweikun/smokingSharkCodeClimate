@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import isEmpty from 'lodash/isEmpty'
 import ChatBubble from '../containers/ChatBubble'
 import ChatInput from '../containers/ChatInput'

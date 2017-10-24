@@ -13,4 +13,17 @@ const queryPatients = gql`
     }
   }
 `
+// const queryPatientBySearchTerm = gql`
+//   query QueryPatientBySearchTerm($inputValue: String) {
+//     patients(filter: { name_contains: $inputValue }) {
+//       _id
+//       nickname
+//       gender
+//       dateOfBirth
+//       avatar
+//       startOfIllness
+//       diabetesType
+//     }
+//   }
+// `
 export default queryPatients

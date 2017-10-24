@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 export const ChatViewPanel = styled.div`
-  width: 420px;
+  flex: 0 0 420px;
   margin-left: 2px;
   display: flex;
   flex-direction: column;

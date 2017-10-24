@@ -1,9 +1,16 @@
 import { connect } from 'react-redux'
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import { get } from 'lodash'
 import { withRouter } from 'react-router'
 import MeasurementHistory from '../components/measurement-history.jsx'
-import { getMeasurementHistory, editBloodGlucoses, insertBloodGlucoses, startInsertBloodGlucoses, deleteBloodGlucoses } from '../actions/blood-glucose'
+import {
+  getMeasurementHistory,
+  editBloodGlucoses,
+  insertBloodGlucoses,
+  startInsertBloodGlucoses,
+  deleteBloodGlucoses,
+} from '../actions/blood-glucose'
 
 const mapStateToProps = state => ({
   treatmentHistory: state.bloodGlucose.treatmentHistory,
@@ -29,18 +36,15 @@ class container extends React.Component {
   render() {
     return <MeasurementHistory {...this.props} />
   }
-
 }
 
-export default connect(
-  mapStateToProps, {
-    getMeasurementHistory,
-    editBloodGlucoses,
-    insertBloodGlucoses,
-    startInsertBloodGlucoses,
-    deleteBloodGlucoses,
-  },
-)(container)
+export default connect(mapStateToProps, {
+  getMeasurementHistory,
+  editBloodGlucoses,
+  insertBloodGlucoses,
+  startInsertBloodGlucoses,
+  deleteBloodGlucoses,
+})(container)
 
 container.propTypes = {
   getMeasurementHistory: PropTypes.func,

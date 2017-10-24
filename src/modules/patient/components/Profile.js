@@ -1,12 +1,11 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
-// import get from 'lodash/get'
 import { graphql } from 'react-apollo'
 import { Avatar, Button } from 'antd'
 import queryPatientById from '../actions/profile'
 
-const PatientProfile = (props) => {
-  const { history, data } = props
+const PatientProfile = ({ history, data }) => {
   let avatar = ''
   let nickname = ''
   if (!data.loading) {
@@ -22,11 +21,11 @@ const PatientProfile = (props) => {
         <AvatarZone>
           <Avatar size="large" src={avatar} />
         </AvatarZone>
-        <Name>
-          {nickname}
-        </Name>
+        <Name>{nickname}</Name>
         <AdditionalZone>
-          <Button type="primary" size="large" onClick={openChatRoom}>发消息</Button>
+          <Button type="primary" size="large" onClick={openChatRoom}>
+            发消息
+          </Button>
         </AdditionalZone>
       </Header>
     </div>
@@ -34,8 +33,7 @@ const PatientProfile = (props) => {
 }
 
 PatientProfile.propTypes = {
-  history: PropTypes.func,
-  // patient: PropTypes.object,
+  history: PropTypes.object,
   data: PropTypes.object,
 }
 

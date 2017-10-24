@@ -8,15 +8,31 @@ export const insertTextMessages = gql`
   }
 `
 export const inserAudioMessages = gql`
-  mutation SendAudioChatMessage($userId: String!, $chatRoomId: ID!, $base64EncodedAudioData: String!) {
-    sendNeedleAudioChatMessage(userId: $userId, chatRoomId: $chatRoomId, base64EncodedAudioData: $base64EncodedAudioData) {
+  mutation SendAudioChatMessage(
+    $userId: String!
+    $chatRoomId: ID!
+    $base64EncodedAudioData: String!
+  ) {
+    sendNeedleAudioChatMessage(
+      userId: $userId
+      chatRoomId: $chatRoomId
+      base64EncodedAudioData: $base64EncodedAudioData
+    ) {
       audioUrl
     }
   }
 `
 export const inserImageMessages = gql`
-  mutation SendImageChatMessage($userId: String!, $chatRoomId: ID!, $base64EncodedImageData: String!) {
-    sendNeedleImageChatMessage(userId: $userId, chatRoomId: $chatRoomId, base64EncodedImageData: $base64EncodedImageData) {
+  mutation SendImageChatMessage(
+    $userId: String!
+    $chatRoomId: ID!
+    $base64EncodedImageData: String!
+  ) {
+    sendNeedleImageChatMessage(
+      userId: $userId
+      chatRoomId: $chatRoomId
+      base64EncodedImageData: $base64EncodedImageData
+    ) {
       imageUrl
     }
   }

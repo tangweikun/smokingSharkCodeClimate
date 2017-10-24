@@ -8,7 +8,8 @@ import {
   ApolloClient,
   IntrospectionFragmentMatcher,
 } from 'react-apollo'
-import { SubscriptionClient, addGraphQLSubscriptions } from 'subscriptions-transport-ws'
+import { SubscriptionClient } from 'subscriptions-transport-ws'
+import { addGraphQLSubscriptions } from 'add-graphql-subscriptions'
 import PropTypes from 'prop-types'
 import { ThemeProvider } from 'styled-components'
 import theme from '../themes/theme'
@@ -36,27 +37,24 @@ const httpNetworkInterface = createNetworkInterface({
   uri: getUri(),
 })
 
-httpNetworkInterface.use([
-  {
-    applyMiddleware(req, next) {
-      if (!req.options.headers) {
-        req.options.headers = {} // Create the header object if needed.
-      }
-      req.options.headers['client-codename'] = 'TEST'
-      req.options.headers['Access-Control-Allow-Origin'] = '*'
-      req.options.headers.authorization = localStorage.getItem('token')
-        ? localStorage.getItem('token')
-        : ''
-      next()
-    },
-  },
-])
+// httpNetworkInterface.use([{
+//   applyMiddleware(req, next) {
+//     if (!req.options.headers) {
+//       req.options.headers = {}  // Create the header object if needed.
+//     }
+//     req.options.headers['client-codename'] = 'TEST'
+//     req.options.headers['Access-Control-Allow-Origin'] = '*'
+//     req.options.headers.authorization =
+//     localStorage.getItem('token') ? localStorage.getItem('token') : ''
+//     next()
+//   },
+// }])
 const wsUri = getUri(true)
 const subscriptionClient = new SubscriptionClient(wsUri, {
   reconnect: true,
-  connectionParams: {
-    token: localStorage.getItem('token') ? localStorage.getItem('token') : null,
-  },
+  // connectionParams: {
+  //   token: localStorage.getItem('token') ? localStorage.getItem('token') : null,
+  // },
 })
 
 const networkInterface = addGraphQLSubscriptions(httpNetworkInterface, subscriptionClient)

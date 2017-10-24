@@ -10,4 +10,6 @@ module.exports = {
   'avatar-size-lg': '60px',
   'avatar-size-sm': '24px',
 
+  'table-padding-vertical': '8px',
+  'table-padding-horizontal': '8px',
 }

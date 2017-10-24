@@ -16,7 +16,7 @@ export const TabsWithStyle = styled(Tabs)`
   }
 `
 export const ChatMessagePanel = styled.div`
-  width: 320px;
+  flex: 0 0 320px;
   background-color: #fff;
   overflow-y: auto;
 `
@@ -77,6 +77,7 @@ export const ChatMessageBrief = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  width: 232px;
 `
 
 export const NameLine = styled.div`

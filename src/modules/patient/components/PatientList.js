@@ -1,20 +1,22 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import { graphql } from 'react-apollo'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import pinyin from 'pinyin-es5'
 import debounce from 'lodash/debounce'
+import Downshift from 'downshift'
 import {
   PatientListContainer,
-  PatientListHeader,
   PatientListDetail,
+  Header,
   Logo,
   SystemName,
-  PatientListHomePage } from './styled-component'
+  PatientListHomePage,
+} from './styled-component'
 import ListItem from './ListItem'
 import Profile from './Profile'
 import queryPatients from '../actions/patientList'
-import SearchPatientList from './SearchPatientList'
 
 class PatientList extends React.Component {
   static propTypes = {
@@ -31,8 +33,10 @@ class PatientList extends React.Component {
     const { history } = this.props
     history.push(`/patient/${patient._id}`)
   }
+
   handlePatientsSearch = debounce((searchInput) => {
     const patientList = get(this.props, 'data.patients', [])
+    console.log('searching', patientList.length)
     const patients = patientList.filter(o => o.nickname)
     let searchPatientList = []
     if (searchInput) {
@@ -53,37 +57,83 @@ class PatientList extends React.Component {
     if (!loading) {
       patientList = get(this.props, 'data.patients', [])
     }
-    const { searchPatientList, isSearch } = this.state
     return (
       <div style={{ display: 'flex', flex: '1' }}>
         <PatientListContainer>
-          <PatientListHeader handlePatientsSearch={this.handlePatientsSearch} {...this.props} />
-          {isSearch && !!patientList.length ? (
-            <SearchPatientList
-              patientList={searchPatientList}
-              handlePatientClick={this.handlePatientClick}
-            />
-          ) : (
-            patientList.map(patient => (
-              <ListItem
-                key={patient._id}
-                patient={patient}
-                switchPatient={() => this.handlePatientClick(patient)}
-              />
-            ))
-          )}
+          <BasicAutocomplete
+            items={patientList}
+            onChange={selectedItem => console.log(selectedItem)}
+            handlePatientClick={this.handlePatientClick}
+            loading={this.props.data.loading}
+          />
         </PatientListContainer>
-        { this.props.patientId
-          ? (<PatientListDetail>
+        {this.props.patientId ? (
+          <PatientListDetail>
             <Profile {...this.props} />
-          </PatientListDetail>)
-          : (<PatientListHomePage>
+          </PatientListDetail>
+        ) : (
+          <PatientListHomePage>
             <Logo src={'./logo_lg.png'} />
             <SystemName>iHealth 糖尿病共同照护院外管理系统</SystemName>
-          </PatientListHomePage>)
-        }
+          </PatientListHomePage>
+        )}
       </div>
     )
   }
 }
 export default graphql(queryPatients)(PatientList)
+
+const SelectedPatient = ({ patientId }) =>
+  patientId ? (
+    <PatientListDetail>
+      <Profile patientId={patientId} />
+    </PatientListDetail>
+  ) : (
+    <PatientListHomePage>
+      <Logo src={'./logo_lg.png'} />
+      <SystemName>iHealth 糖尿病共同照护院外管理系统</SystemName>
+    </PatientListHomePage>
+  )
+
+SelectedPatient.propTypes = {
+  patientId: PropTypes.string,
+}
+
+function BasicAutocomplete({ items, onChange, handlePatientClick, loading }) {
+  return (
+    <Downshift onChange={onChange}>
+      {({ getInputProps, getItemProps, isOpen, inputValue, selectedItem, highlightedIndex }) => (
+        <div>
+          <Header>
+            <input {...getInputProps({ placeholder: '查询结果: ' })} />
+          </Header>
+          {loading ? (
+            <div>loading...</div>
+          ) : (
+            <SearchResults
+              inputValue={inputValue}
+              items={items}
+              handlePatientClick={handlePatientClick}
+            />
+          )}
+        </div>
+      )}
+    </Downshift>
+  )
+}
+const SearchResults = ({ inputValue, items, handlePatientClick }) => (
+  <div style={{ border: '1px solid #ccc' }}>
+    {items
+      .filter(
+        i =>
+          inputValue && i.nickname && i.nickname.toLowerCase().includes(inputValue.toLowerCase()),
+      )
+      .map(patient => (
+        <ListItem
+          key={patient._id}
+          patient={patient}
+          switchPatient={() => handlePatientClick(patient)}
+        />
+      ))}
+  </div>
+)

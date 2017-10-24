@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import 'moment/locale/zh-cn'
 import createStore from './store/createStore'
 import registerServiceWorker from './common/registerServiceWorker'
 
@@ -27,15 +28,12 @@ if (isDev && module.hot) {
       renderError(e)
     }
   }
-  module.hot.accept([
-    './common/main',
-    './routers',
-  ], () =>
-      setImmediate(() => {
-        ReactDOM.unmountComponentAtNode(MOUNT_NODE)
-        render()
-      }),
-    )
+  module.hot.accept(['./common/main', './routers'], () =>
+    setImmediate(() => {
+      ReactDOM.unmountComponentAtNode(MOUNT_NODE)
+      render()
+    }),
+  )
 }
 render()
 registerServiceWorker()
